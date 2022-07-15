@@ -11,6 +11,7 @@ from mutagen.flac import FLAC
 import librosa
 import soundfile
 import vamp
+from itertools import chain
 
 # Spotify API Details
 
@@ -19,7 +20,10 @@ import vamp
 car_tunes = open("Car Tunes.m3u", "w") # 60 - 80 bpm Note: Reduces the chance of accident
 high_intensity = open("High Intensity.m3u", "w") # > 140 bpm
 jogging = open("Jogging.m3u", "w") # 120 - 140 bpm
-pathlist = Path(os.getcwd()).glob('**/*.flac')
+pathlist_flac = Path(os.getcwd()).glob('**/*.flac')
+pathlist_mp3 = Path(os.getcwd()).glob('**/*.mp3')
+pathlist_wav = Path(os.getcwd()).glob('**/*.wav')
+pathlist = chain(pathlist_flac , pathlist_mp3, pathlist_wav)
 length_to_cut = len(os.getcwd())
 
 def main():
