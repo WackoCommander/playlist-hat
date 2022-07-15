@@ -20,10 +20,11 @@ from itertools import chain
 car_tunes = open("Car Tunes.m3u", "w") # 60 - 80 bpm Note: Reduces the chance of accident
 high_intensity = open("High Intensity.m3u", "w") # > 140 bpm
 jogging = open("Jogging.m3u", "w") # 120 - 140 bpm
-pathlist_flac = Path(os.getcwd()).glob('**/*.flac')
+
 pathlist_mp3 = Path(os.getcwd()).glob('**/*.mp3')
+pathlist_flac = Path(os.getcwd()).glob('**/*.flac')
 pathlist_wav = Path(os.getcwd()).glob('**/*.wav')
-pathlist = chain(pathlist_flac , pathlist_mp3, pathlist_wav)
+pathlist = chain(pathlist_mp3 , pathlist_wav, pathlist_flac)
 length_to_cut = len(os.getcwd())
 
 def main():
@@ -31,8 +32,11 @@ def main():
         path_str = str(path)
         path_str_t = path_str[len(os.getcwd()) + 1:]
         print("Processing " + path_str_t)
-        data, rate = soundfile.read(path)
         data, fake_rate = librosa.load(path)
+        try:
+            fake_data, rate = soundfile.read(path)
+        except:
+            rate = 44100
         bpm = vamp.collect(data, rate, "vamp-example-plugins:fixedtempo")
         bpm = bpm['list']
         bpm = bpm[0]['values'][0]
